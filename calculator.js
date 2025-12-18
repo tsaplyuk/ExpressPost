@@ -151,23 +151,38 @@ function calculateDistanceCost(originCity, destinationCity) {
   return 75
 }
 
-document.getElementById("calculatorForm").addEventListener("submit", (e) => {
+document.getElementById("calculatorForm").addEventListener("submit", async (e) => {
   e.preventDefault()
 
+  const form = e.target
   const originCityKey = document.getElementById("originCity").value
   const cityKey = document.getElementById("city").value
-  const weight = Number.parseFloat(document.getElementById("weight").value)
+  const weightInput = document.getElementById("weight")
+  const weight = weightInput.value
   const deliveryType = document.querySelector('input[name="delivery"]:checked').value
 
-  if (!originCityKey || !cityKey || !weight) {
-    alert("Будь ласка, заповніть всі поля")
+  // Валідація форми
+  Validator.clearFormErrors(form)
+  
+  const validation = Validator.validateCalculatorForm({
+    originCity: originCityKey,
+    city: cityKey,
+    weight: weight
+  })
+
+  if (!validation.valid) {
+    validation.errors.forEach(error => {
+      const field = document.getElementById(error.field === 'city' ? 'city' : error.field)
+      if (field) {
+        Validator.showFieldError(field, error.message)
+      } else {
+        Notification.error(error.message)
+      }
+    })
     return
   }
 
-  if (originCityKey === cityKey) {
-    alert("Місто відправлення та доставки не можуть співпадати")
-    return
-  }
+  const weightValue = Number.parseFloat(weight)
 
   // Отримання даних
   const originCity = cities[originCityKey]
@@ -175,28 +190,63 @@ document.getElementById("calculatorForm").addEventListener("submit", (e) => {
   const delivery = deliveryTypes[deliveryType]
 
   const basePrice = city.baseTariff
-  const weightPrice = weight * city.pricePerKg
+  const weightPrice = weightValue * city.pricePerKg
   const distanceCost = calculateDistanceCost(originCityKey, cityKey)
   const subtotal = basePrice + weightPrice + distanceCost
   const total = subtotal * delivery.coefficient
 
+  // Зберігаємо в історію
+  CalculatorHistory.save({
+    originCity: originCity.name,
+    destinationCity: city.name,
+    weight: weightValue,
+    deliveryType: delivery.name,
+    basePrice,
+    weightPrice,
+    distanceCost,
+    total
+  })
+
   // Відображення результату
   document.getElementById("resultOriginCity").textContent = originCity.name
   document.getElementById("resultCity").textContent = city.name
-  document.getElementById("resultWeight").textContent = weight + " кг"
+  document.getElementById("resultWeight").textContent = weightValue + " кг"
   document.getElementById("resultDelivery").textContent = delivery.name
-  document.getElementById("resultBase").textContent = basePrice.toFixed(2) + " грн"
-  document.getElementById("resultWeightCost").textContent = weightPrice.toFixed(2) + " грн"
-  document.getElementById("resultDistanceCost").textContent = distanceCost.toFixed(2) + " грн"
-  document.getElementById("resultTotal").textContent = total.toFixed(2) + " грн"
+  document.getElementById("resultBase").textContent = formatCurrency(basePrice)
+  document.getElementById("resultWeightCost").textContent = formatCurrency(weightPrice)
+  document.getElementById("resultDistanceCost").textContent = formatCurrency(distanceCost)
+  document.getElementById("resultTotal").textContent = formatCurrency(total)
 
-  // Показати результат
+  // Показати результат з анімацією
   const resultCard = document.getElementById("result")
-  resultCard.style.display = "block"
-  resultCard.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  Animations.slideUp(resultCard, 400)
+  scrollToElement(resultCard, { behavior: "smooth", block: "nearest" })
+  
+  Notification.success(`Розрахунок виконано! Вартість доставки: ${formatCurrency(total)}`)
 })
 
 // Приховати результат при зміні даних форми
-document.getElementById("calculatorForm").addEventListener("change", () => {
-  document.getElementById("result").style.display = "none"
+document.getElementById("calculatorForm").addEventListener("change", (e) => {
+  const result = document.getElementById("result")
+  if (result.style.display !== "none") {
+    Animations.fadeOut(result, 200)
+  }
+  
+  // Очищаємо помилки валідації
+  Validator.hideFieldError(e.target)
+})
+
+// Ініціалізація при завантаженні сторінки
+document.addEventListener("DOMContentLoaded", () => {
+  // Додаємо секцію історії якщо є контейнер
+  const historyContainer = document.getElementById("calculatorHistory")
+  if (historyContainer) {
+    CalculatorHistory.render(historyContainer, 5)
+  }
+  
+  // Анімація появи форми
+  const form = document.getElementById("calculatorForm")
+  if (form) {
+    Animations.fadeIn(form, 300)
+  }
 })

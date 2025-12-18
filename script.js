@@ -43,18 +43,60 @@ document.addEventListener("DOMContentLoaded", () => {
   // Обробка форми контактів
   const contactForm = document.getElementById("contactForm")
   if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
+    contactForm.addEventListener("submit", async (e) => {
       e.preventDefault()
 
-      const name = document.getElementById("name").value
-      const email = document.getElementById("email").value
-      const subject = document.getElementById("subject").value
+      const formData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone")?.value || '',
+        subject: document.getElementById("subject").value,
+        message: document.getElementById("message").value
+      }
 
-      alert(
-        `Дякуємо, ${name}!\n\nВаше повідомлення успішно відправлено.\nМи зв'яжемося з вами найближчим часом на email: ${email}`,
-      )
+      // Валідація
+      Validator.clearFormErrors(contactForm)
+      const validation = Validator.validateContactForm(formData)
 
-      contactForm.reset()
+      if (!validation.valid) {
+        validation.errors.forEach(error => {
+          const field = document.getElementById(error.field)
+          if (field) {
+            Validator.showFieldError(field, error.message)
+          }
+        })
+        return
+      }
+
+      // Показуємо завантажувач
+      const submitButton = contactForm.querySelector('button[type="submit"]')
+      const originalText = submitButton.textContent
+      submitButton.disabled = true
+      submitButton.textContent = 'Відправка...'
+
+      try {
+        const response = await API.submitContactForm(formData)
+        
+        if (response.success) {
+          Notification.success(`Дякуємо, ${formData.name}! Ваше повідомлення успішно відправлено.`)
+          
+          // Зберігаємо в історію
+          const submissions = Storage.get(STORAGE_KEYS.CONTACT_SUBMISSIONS, [])
+          submissions.unshift({
+            ...formData,
+            timestamp: new Date().toISOString()
+          })
+          Storage.set(STORAGE_KEYS.CONTACT_SUBMISSIONS, submissions.slice(0, 50))
+          
+          contactForm.reset()
+        }
+      } catch (error) {
+        Notification.error("Помилка при відправці повідомлення. Спробуйте ще раз.")
+        console.error(error)
+      } finally {
+        submitButton.disabled = false
+        submitButton.textContent = originalText
+      }
     })
   }
 
@@ -62,13 +104,27 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
       e.preventDefault()
-      const target = document.querySelector(this.getAttribute("href"))
-      if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
+      const href = this.getAttribute("href")
+      if (href && href !== "#") {
+        scrollToElement(href, { behavior: "smooth", block: "start" })
       }
+    })
+  })
+
+  // Анімація появи елементів при прокрутці
+  const cards = document.querySelectorAll('.feature-card, .service-card, .testimonial-card, .stat-card')
+  if (cards.length > 0) {
+    Animations.scrollReveal(cards, {
+      threshold: 0.1,
+      animation: 'fadeIn',
+      duration: 400
+    })
+  }
+
+  // Анімація кнопок при натисканні
+  document.querySelectorAll('.btn').forEach(button => {
+    button.addEventListener('click', function() {
+      Animations.buttonPress(this)
     })
   })
 })
