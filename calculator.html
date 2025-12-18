@@ -1,0 +1,167 @@
+<!-- Сайт розроблено студенткою Цаплюк Вікторія Володимирівна, група ФЕМП 3-13 -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор доставки - ExpressPost</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>ExpressPost</h1>
+                    <p class="tagline">Швидка доставка по Україні</p>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Головна</a>
+                    <a href="clients.html" class="nav-link">Клієнти</a>
+                    <a href="calculator.html" class="nav-link active">Калькулятор</a>
+                    <a href="services.html" class="nav-link">Послуги</a>
+                    <a href="tracking.html" class="nav-link">Відстеження</a>
+                    <a href="contacts.html" class="nav-link">Контакти</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h2 class="page-title">Калькулятор вартості доставки</h2>
+                <p class="page-subtitle">Розрахуйте вартість доставки вашого відправлення</p>
+            </div>
+        </section>
+
+        <section class="calculator-section">
+            <div class="container">
+                <div class="calculator-wrapper">
+                    <form id="calculatorForm" class="calculator-form">
+                        <!-- Added origin city selection -->
+                        <div class="form-group">
+                            <label for="originCity">Місто відправлення</label>
+                            <select id="originCity" required>
+                                <option value="">Оберіть місто</option>
+                                <option value="kyiv">Київ</option>
+                                <option value="lviv">Львів</option>
+                                <option value="odesa">Одеса</option>
+                                <option value="dnipro">Дніпро</option>
+                                <option value="kharkiv">Харків</option>
+                                <option value="zaporizhzhia">Запоріжжя</option>
+                                <option value="vinnytsia">Вінниця</option>
+                                <option value="poltava">Полтава</option>
+                                <option value="chernivtsi">Чернівці</option>
+                                <option value="ivano-frankivsk">Івано-Франківськ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">Місто доставки</label>
+                            <select id="city" required>
+                                <option value="">Оберіть місто</option>
+                                <option value="kyiv">Київ</option>
+                                <option value="lviv">Львів</option>
+                                <option value="odesa">Одеса</option>
+                                <option value="dnipro">Дніпро</option>
+                                <option value="kharkiv">Харків</option>
+                                <option value="zaporizhzhia">Запоріжжя</option>
+                                <option value="vinnytsia">Вінниця</option>
+                                <option value="poltava">Полтава</option>
+                                <option value="chernivtsi">Чернівці</option>
+                                <option value="ivano-frankivsk">Івано-Франківськ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weight">Вага відправлення (кг)</label>
+                            <input type="number" id="weight" min="0.1" step="0.1" placeholder="Наприклад: 2.5" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Тип доставки</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="delivery" value="standard" checked>
+                                    <span>Стандартна (3-5 днів)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="delivery" value="express">
+                                    <span>Експрес (1-2 дні)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="delivery" value="nextday">
+                                    <span>Наступний день</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">Розрахувати вартість</button>
+                    </form>
+
+                    <div id="result" class="result-card" style="display: none;">
+                        <h3>Результат розрахунку</h3>
+                        <div class="result-details">
+                            <!-- Added origin city to results -->
+                            <div class="result-row">
+                                <span>Відправлення з:</span>
+                                <strong id="resultOriginCity"></strong>
+                            </div>
+                            <div class="result-row">
+                                <span>Доставка до:</span>
+                                <strong id="resultCity"></strong>
+                            </div>
+                            <div class="result-row">
+                                <span>Вага:</span>
+                                <strong id="resultWeight"></strong>
+                            </div>
+                            <div class="result-row">
+                                <span>Тип доставки:</span>
+                                <strong id="resultDelivery"></strong>
+                            </div>
+                            <div class="result-row">
+                                <span>Базовий тариф:</span>
+                                <strong id="resultBase"></strong>
+                            </div>
+                            <div class="result-row">
+                                <span>Вартість за вагу:</span>
+                                <strong id="resultWeightCost"></strong>
+                            </div>
+                            <!-- Added distance cost row -->
+                            <div class="result-row">
+                                <span>Доплата за відстань:</span>
+                                <strong id="resultDistanceCost"></strong>
+                            </div>
+                            <div class="result-divider"></div>
+                            <div class="result-row result-total">
+                                <span>Загальна вартість:</span>
+                                <strong id="resultTotal"></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>Студентський проект</strong></p>
+                    <p>Цаплюк Вікторія Володимирівна</p>
+                    <p>Група: ФЕМП 3-137</p>
+                    <p>Email: v.tsaplyuk_femp_13_23_b_d@knute.edu.ua</p>
+                </div>
+                <div class="footer-links">
+                    <p>&copy; 2025 ExpressPost. Усі права захищені.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="calculator.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!-- Сайт розроблено студенткою Цаплюк Вікторія Володимирівна, група ФЕМП 3-13 -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Відстеження посилки - ExpressPost</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>ExpressPost</h1>
+                    <p class="tagline">Швидка доставка по Україні</p>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Головна</a>
+                    <a href="clients.html" class="nav-link">Клієнти</a>
+                    <a href="calculator.html" class="nav-link">Калькулятор</a>
+                    <a href="services.html" class="nav-link">Послуги</a>
+                    <a href="tracking.html" class="nav-link active">Відстеження</a>
+                    <a href="contacts.html" class="nav-link">Контакти</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h2 class="page-title">Відстеження посилки</h2>
+                <p class="page-subtitle">Дізнайтеся де знаходиться ваша посилка</p>
+            </div>
+        </section>
+
+        <section class="tracking-section">
+            <div class="container">
+                <div class="tracking-wrapper">
+                    <form id="trackingForm" class="tracking-form">
+                        <div class="form-group">
+                            <label for="trackingNumber">Номер відстеження</label>
+                            <input type="text" id="trackingNumber" placeholder="Введіть номер посилки (наприклад: EP12345678)" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Відстежити посилку</button>
+                    </form>
+
+                    <div id="trackingResult" class="tracking-result" style="display: none;">
+                        <div class="tracking-header">
+                            <h3>Трек-номер: <span id="trackNumber"></span></h3>
+                            <div class="tracking-status" id="trackStatus"></div>
+                        </div>
+
+                        <div class="tracking-timeline">
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">18.12.2024, 09:15</div>
+                                    <div class="timeline-title">Посилка прийнята</div>
+                                    <div class="timeline-location">Відділення Київ, вул. Хрещатик, 1</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">18.12.2024, 14:30</div>
+                                    <div class="timeline-title">Відправлено до сортувального центру</div>
+                                    <div class="timeline-location">Київ</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item active">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">19.12.2024, 08:00</div>
+                                    <div class="timeline-title">Посилка в дорозі</div>
+                                    <div class="timeline-location">Прямує до Львова</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">Очікується</div>
+                                    <div class="timeline-title">Прибуття до відділення призначення</div>
+                                    <div class="timeline-location">Львів, вул. Шевченка, 10</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">Очікується</div>
+                                    <div class="timeline-title">Готова до видачі</div>
+                                    <div class="timeline-location">Відділення Львів</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tracking-info">
+                            <div class="tracking-info-item">
+                                <strong>Відправник:</strong> Київ
+                            </div>
+                            <div class="tracking-info-item">
+                                <strong>Отримувач:</strong> Львів
+                            </div>
+                            <div class="tracking-info-item">
+                                <strong>Очікувана дата доставки:</strong> 20.12.2024
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tracking-help">
+            <div class="container">
+                <h2 class="section-title">Часті питання</h2>
+                <div class="faq-grid">
+                    <div class="faq-card">
+                        <h4>Де знайти номер відстеження?</h4>
+                        <p>Номер відстеження вказано на квитанції при відправленні посилки та надсилається SMS-повідомленням.</p>
+                    </div>
+                    <div class="faq-card">
+                        <h4>Як часто оновлюється статус?</h4>
+                        <p>Інформація оновлюється в режимі реального часу при кожній зміні статусу посилки.</p>
+                    </div>
+                    <div class="faq-card">
+                        <h4>Що робити якщо посилка затримується?</h4>
+                        <p>Зв'яжіться з нашою підтримкою за телефоном 0-800-123-456 або напишіть в онлайн-чат.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>Студентський проект</strong></p>
+                    <p>Цаплюк Вікторія Володимирівна</p>
+                    <p>Група: ФЕМП 3-137</p>
+                    <p>Email: v.tsaplyuk_femp_13_23_b_d@knute.edu.ua</p>
+                </div>
+                <div class="footer-links">
+                    <p>&copy; 2025 ExpressPost. Усі права захищені.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="tracking.js"></script>
+</body>
+</html>
